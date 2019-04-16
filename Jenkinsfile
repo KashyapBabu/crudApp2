@@ -12,12 +12,20 @@ pipeline {
             stage('Build') {
                 steps {
                     slackSend channel: '#devops', color: '#FFFF00',  message: 'Stage Build started', tokenCredentialId: 'slack_token'
-		    withSonarQubeEnv('sonarqube'){
+                    withSonarQubeEnv('sonarqube') {
                     sh 'mvn -Dmaven.test.failure.ignore=true clean package sonar:sonar'
                     //sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
                     }
-		}
+                    }
             }
+            stage("SonarQube Quality Gate") {
+            timeout(time: 1, unit: 'HOURS') {
+            def qg = waitForQualityGate()
+            if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+             }
+           }
+        }
             stage ('Upload to Nexus') {
                 when {
                     branch 'master'
