@@ -19,6 +19,9 @@ pipeline {
 		}
             }
             stage ('Upload to Nexus') {
+                when {
+                    branch 'master'
+                }
                 steps {
                     slackSend channel: '#devops', color: '#FFFF00',  message: 'Stage upload to Nexus started', tokenCredentialId: 'slack_token'
                     nexusArtifactUploader artifacts: [[artifactId: 'crudApp', classifier: '', file: 'target/crudApp.war', type: 'war']], credentialsId: 'nexus', groupId: 'maven-Central', nexusUrl: '$NEXUS_IP', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '1.${BUILD_NUMBER}'
