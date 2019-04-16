@@ -13,7 +13,7 @@ pipeline {
                 steps {
                     slackSend channel: '#devops', color: '#FFFF00',  message: 'Stage Build started', tokenCredentialId: 'slack_token'
 		    withSonarQubeEnv('sonarqube'){
-                    sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+                    sh 'mvn -Dmaven.test.failure.ignore=true clean package sonar:sonar'
                     //sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
                     }
 		}
