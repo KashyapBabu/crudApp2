@@ -12,13 +12,23 @@ pipeline {
             stage('Build') {
                 steps {
                     slackSend channel: '#devops', color: '#FFFF00',  message: 'Stage Build started', tokenCredentialId: 'slack_token'
-		    withSonarQubeEnv('My SonarQube Server'){
-                    sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+                    withSonarQubeEnv('sonarqube') {
+                    sh 'mvn -Dmaven.test.failure.ignore=true clean package sonar:sonar'
                     //sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
                     }
-		}
+                    }
             }
+            stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
             stage ('Upload to Nexus') {
+                when {
+                    branch 'master'
+                }
                 steps {
                     slackSend channel: '#devops', color: '#FFFF00',  message: 'Stage upload to Nexus started', tokenCredentialId: 'slack_token'
                     nexusArtifactUploader artifacts: [[artifactId: 'crudApp', classifier: '', file: 'target/crudApp.war', type: 'war']], credentialsId: 'nexus', groupId: 'maven-Central', nexusUrl: '$NEXUS_IP', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '1.${BUILD_NUMBER}'
