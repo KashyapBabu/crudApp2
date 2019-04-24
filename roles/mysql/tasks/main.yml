@@ -12,3 +12,15 @@
 
 - name: Install the mysql-server
   yum: name=mysql-server state=present
+
+- name: Create MySQL configuration file
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify:
+  - restart mysql
+
+- name: Start Mysql service
+  service: name=mysqld state=started enabled=yes
+
+
+# include init_db.yml file
+- include: init_db.yml
