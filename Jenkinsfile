@@ -6,7 +6,7 @@ pipeline {
     }
     tools {
      //   jdk 'Java'
-        maven 'maven2'
+        maven 'maven'
     }
         stages {
            /* stage ('Git') {
