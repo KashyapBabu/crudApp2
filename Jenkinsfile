@@ -22,7 +22,7 @@ pipeline {
             }
             stage ('Nexus') {
                 steps {
-                    nexusArtifactUploader artifacts: [[artifactId: 'crudApp', classifier: '', file: 'target/crudApp.war', type: 'war']], credentialsId: 'nexus', groupId: 'maven-Central', nexusUrl: '54.237.96.28:8081/nexus', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '1.${BUILD_NUMBER}'
+                    nexusArtifactUploader artifacts: [[artifactId: 'crudApp', classifier: '', file: 'target/crudApp.war', type: 'war']], credentialsId: 'nexus', groupId: 'maven-Central', nexusUrl: '54.237.96.28:8081/nexus', nexusVersion: 'nexus2', protocol: 'http', repository: 'maven-releases', version: '1.${BUILD_NUMBER}'
                 }
             }
             stage ('Docker Build') {
