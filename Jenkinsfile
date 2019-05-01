@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = "dineshp4/crudapp"
+        DOCKER_IMAGE_NAME = "kashyapputta/crudapp"
         CANARY_REPLICAS = 0
     }
     tools {
