@@ -30,7 +30,7 @@ pipeline {
                     branch 'master'
                 } 
                 steps {
-                    sh 'wget http://54.237.96.28:8081/nexus:8081/repository/releases/maven-Central/crudApp/1.${BUILD_NUMBER}/crudApp-1.${BUILD_NUMBER}.war -O crudApp.war'
+                    sh 'wget http://54.237.96.28:8081/nexus/repository/releases/maven-Central/crudApp/1.${BUILD_NUMBER}/crudApp-1.${BUILD_NUMBER}.war -O crudApp.war'
                     script {
                         app = docker.build(DOCKER_IMAGE_NAME)
                     }
